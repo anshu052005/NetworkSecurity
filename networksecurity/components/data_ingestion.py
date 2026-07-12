@@ -19,9 +19,12 @@ load_dotenv()
 MONGO_DB_URL=os.getenv("MONGO_DB_URL")
 
 
+
+
 class DataIngestion:
     def __init__(self,data_ingestion_config:DataIngestionConfig):
         try:
+            # self.data_ingestion_config = dataingestionconfig
             self.data_ingestion_config=data_ingestion_config
         except Exception as e:
             raise NetworkSecurityException(e,sys)
@@ -34,8 +37,34 @@ class DataIngestion:
             database_name=self.data_ingestion_config.database_name
             collection_name=self.data_ingestion_config.collection_name
             self.mongo_client=pymongo.MongoClient(MONGO_DB_URL)
+            # self.mongo_client["NetworkData"]["phishing_data"]
             collection=self.mongo_client[database_name][collection_name]
 
+
+
+
+                    # MongoDB Collection
+                    #         │
+                    #         ▼
+                    # collection.find()
+                    #         │
+                    #         ▼
+                    # Cursor
+                    #         │
+                    #         ▼
+                    # list(...)
+                    #         │
+                    #         ▼
+                    # Python List
+                    #         │
+                    #         ▼
+                    # pd.DataFrame(...)
+                    #         │
+                    #         ▼
+                    # DataFrame
+                    #         │
+                    #         ▼
+                    #        df
             df=pd.DataFrame(list(collection.find()))
             if "_id" in df.columns.to_list():
                 df=df.drop(columns=["_id"],axis=1)
