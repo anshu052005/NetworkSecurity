@@ -12,7 +12,7 @@ from networksecurity.entity.artifact_entity import (
     DataTransformationArtifact,
     DataValidationArtifact
 )
-
+# yes
 from networksecurity.entity.config_entity import DataTransformationConfig
 from networksecurity.exception.exception import NetworkSecurityException 
 from networksecurity.logging.logger import logging
