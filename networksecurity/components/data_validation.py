@@ -13,15 +13,34 @@ class DataValidation:
                  data_validation_config:DataValidationConfig):
         
         try:
+            # Ab Data Validation ke paas 3 cheezein hain
+            #                  DataValidation
+            #                       │
+            #         ┌─────────────┼──────────────┐
+            #         ▼             ▼              ▼
+            #    Artifact         Config        Schema
+            #         │             │              │
+            #         ▼             ▼              ▼
+            #  train/test       output paths    expected
+            #     paths                         structure
+
             self.data_ingestion_artifact=data_ingestion_artifact
             self.data_validation_config=data_validation_config
             self._schema_config = read_yaml_file(SCHEMA_FILE_PATH)
         except Exception as e:
             raise NetworkSecurityException(e,sys)
-        
+
+    # ye staticmethod ko koi bhi DataValidation class ka object chahiye hi nhi , 
+    # dekho isme self hai hi nhi , isliye humne isko DataValidation() krke likha naki self. karke
+                # Isko:
+
+                # _schema_config nahi chahiye
+                # data_ingestion_artifact nahi chahiye
+                # data_validation_config nahi chahiye
     @staticmethod
     def read_data(file_path)->pd.DataFrame:
         try:
+            # yaha se humne test and train file path ko read kiya aur csv file bana diya aur usko dataframe me convert kiya aur return kar diya
             return pd.read_csv(file_path)
         except Exception as e:
             raise NetworkSecurityException(e,sys)
@@ -68,10 +87,24 @@ class DataValidation:
     
     def initiate_data_validation(self)->DataValidationArtifact:
         try:
+            # yaha se humne data validation ke liye train and test file path ko read kiya aur dataframe me convert kiya. fir humne number of columns validate kiya aur datadrift check kiya. finally humne DataValidationArtifact ka object banaya jisme humne validation_status, valid_train_file_path, valid_test_file_path, invalid_train_file_path, invalid_test_file_path, drift_report_file_path pass kiya.
+                        # DataIngestionArtifact
+                        #         │
+                        #         ▼
+                        # train.csv + test.csv
+                        #         │
+                        #         ▼
+                        # DataValidation.read_data()
+                        #         │
+                        #         ▼
+                        # train_dataframe + test_dataframe
+
             train_file_path=self.data_ingestion_artifact.trained_file_path
             test_file_path=self.data_ingestion_artifact.test_file_path
 
             ## read the data from train and test
+            # isko humne read_data() method me pass kiya jisko sirf file path chahiye aur koi bhi DataValidation ka oject nhi chahiye 
+            # isliye isko humne thoda alag tareeke se likha hai , self. krke nhi likha .
             train_dataframe=DataValidation.read_data(train_file_path)
             test_dataframe=DataValidation.read_data(test_file_path)
             
