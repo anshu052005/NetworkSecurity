@@ -1,14 +1,11 @@
-
 from pymongo import MongoClient
-
-uri = "mongodb+srv://p20anshu05_db_user:<db_password>@cluster0.av5wxkj.mongodb.net/?appName=Cluster0"
-
-# Create a new client and connect to the server
+uri = "mongodb+srv://p20anshu05_db_user:JhJVnZBKwGPxwRQ6@cluster0.wzk4aoo.mongodb.net/"
 client = MongoClient(uri)
-
-# Send a ping to confirm a successful connection
 try:
-    client.admin.command('ping')
-    print("Pinged your deployment. You successfully connected to MongoDB!")
+    client.admin.command("ping")
+    print("Connected successfully")
+    client.close()
+
 except Exception as e:
-    print(e)
+    raise Exception(
+        "The following error occurred: ", e)
